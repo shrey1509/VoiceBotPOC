@@ -1,0 +1,95 @@
+openapi: 3.0.3
+
+info:
+  title: Chaine API Spec
+  description: |-
+    This is a sample Spec Sheet with routes to be used to demo the twilio-whisper flow to answer and respond in calls
+  version: 1.0.11
+
+servers:
+  - url: http://localhost:3000
+  
+  
+paths:       
+  /verifyMCNumber:
+    get:
+      summary: Verify an MC Number 
+      description: Gets the MC number to verify and returns information related to it
+      operationId: verifyMC
+      parameters:
+        - name: MCNumber
+          in: query
+          description: MC number of shipment
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Shipment found
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Shipment'          
+            
+        '400':
+          description: Shipment not found
+          
+  /findEstimatedTime:
+    get:
+      summary: Find estimated delivery time
+      description: Gets the verified MC number and returns estimated delivery time
+      operationId: findTime
+      parameters:
+        - name: MCNumber
+          in: query
+          description: MC number of shipment
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Estimated delivery time found
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Delivery'          
+            
+        '400':
+          description: No estimated delivery time yet
+
+ 
+
+components:
+  schemas:
+    Shipment:
+      required:
+        - from
+        - to
+      type: object
+      properties:
+        from:
+          type: string
+          example: Dallas, TX
+        to:
+          type: string
+          example: Austin, TX
+
+    Delivery:
+      required:
+        - time
+      type: object
+      properties:
+        time:
+          type: string
+          example: 6PM, 12th May, 2024
+
+          
+
+
+       
